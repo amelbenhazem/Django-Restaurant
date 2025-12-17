@@ -1,0 +1,16 @@
+<h1>Restaurants disponibles</h1>
+
+<ul>
+  {% for restaurant in restaurants %}
+  <li>
+    <strong>{{ restaurant.name }}</strong> - {{ restaurant.location }}<br />
+    Tables disponibles :
+    <ul>
+      {% for table in restaurant.table_set.all %}
+      <li>Table {{ table.number }} ({{ table.seats }} places)</li>
+      {% endfor %}
+    </ul>
+    <a href="{% url 'make_reservation' %}">Réserver une table</a>
+  </li>
+  {% endfor %}
+</ul>
