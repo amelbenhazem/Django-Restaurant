@@ -1,3 +1,17 @@
-<h1>Réservation réussie !</h1>
-<p>Merci pour votre réservation.</p>
-<a href="/">Retour à l'accueil</a>
+{% extends 'restaurant/base.html' %}
+
+{% block title %}Réservation réussie - Restaurant Reservation{% endblock %}
+
+{% block content %}
+<div class="success-container">
+    <div class="success-icon">✅</div>
+    <h1>Réservation réussie !</h1>
+    <p>Merci pour votre réservation. Vous recevrez une confirmation par email.</p>
+    <p style="margin-bottom: 2rem;">Nous avons hâte de vous accueillir dans notre restaurant !</p>
+
+    <div class="form-actions" style="justify-content: center; max-width: 500px; margin: 0 auto;">
+        <a href="{% url 'user_dashboard' %}" class="btn btn-primary">Voir mes réservations</a>
+        <a href="{% url 'restaurant_list' %}" class="btn btn-secondary">Retour à l'accueil</a>
+    </div>
+</div>
+{% endblock %}

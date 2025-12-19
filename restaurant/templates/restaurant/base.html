@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Restaurant Reservation{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'restaurant/css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="{% url 'restaurant_list' %}" class="navbar-brand">
+                <span>🍽️</span> Restaurant Reservation
+            </a>
+            <ul class="navbar-menu">
+                <li><a href="{% url 'restaurant_list' %}">Accueil</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'user_dashboard' %}">Mes Réservations</a></li>
+                    <li><a href="{% url 'make_reservation' %}" class="btn btn-primary">Réserver</a></li>
+                    <li><a href="{% url 'logout' %}">Déconnexion ({{ user.username }})</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Connexion</a></li>
+                    <li><a href="{% url 'register' %}" class="btn btn-primary">S'inscrire</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+        <div class="container" style="margin-top: 2rem;">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>À propos</h3>
+                    <p>Restaurant Reservation est votre plateforme de réservation en ligne pour découvrir et réserver les meilleurs restaurants.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Liens rapides</h3>
+                    <ul>
+                        <li><a href="{% url 'restaurant_list' %}">Restaurants</a></li>
+                        <li><a href="{% url 'make_reservation' %}">Réserver</a></li>
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'user_dashboard' %}">Mon compte</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <ul>
+                        <li>📧 contact@restaurant-reservation.com</li>
+                        <li>📞 +33 1 23 45 67 89</li>
+                        <li>📍 Paris, France</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Restaurant Reservation. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

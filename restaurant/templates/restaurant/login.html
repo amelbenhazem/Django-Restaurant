@@ -1,0 +1,49 @@
+{% extends 'restaurant/base.html' %}
+
+{% block title %}Connexion - Restaurant Reservation{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-box">
+        <h2>🔐 Connexion</h2>
+
+        <form method="post">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-error">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="id_username">Nom d'utilisateur</label>
+                <input type="text" name="username" id="id_username" class="form-control" required>
+                {% if form.username.errors %}
+                    <div class="alert alert-error" style="margin-top: 0.5rem;">
+                        {{ form.username.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="id_password">Mot de passe</label>
+                <input type="password" name="password" id="id_password" class="form-control" required>
+                {% if form.password.errors %}
+                    <div class="alert alert-error" style="margin-top: 0.5rem;">
+                        {{ form.password.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                Se connecter
+            </button>
+        </form>
+
+        <div class="auth-links">
+            <p>Pas encore de compte ? <a href="{% url 'register' %}">S'inscrire</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

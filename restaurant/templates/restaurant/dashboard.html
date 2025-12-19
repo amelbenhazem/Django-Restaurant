@@ -1,0 +1,83 @@
+{% extends 'restaurant/base.html' %}
+
+{% block title %}Mes Réservations - Restaurant Reservation{% endblock %}
+
+{% block content %}
+<section class="dashboard">
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>👤 Mes Réservations</h1>
+            <p>Bonjour, {{ user.get_full_name|default:user.username }} !</p>
+        </div>
+
+        {% if reservations %}
+            <div class="reservations-list">
+                {% for reservation in reservations %}
+                <div class="reservation-card">
+                    <div class="reservation-details">
+                        <h3>{{ reservation.table.restaurant.name }}</h3>
+
+                        <div class="reservation-info">
+                            <div class="info-item">
+                                <span>📅 <strong>Date:</strong> {{ reservation.date|date:"d/m/Y" }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span>🕐 <strong>Heure:</strong> {{ reservation.time|time:"H:i" }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span>🪑 <strong>Table:</strong> {{ reservation.table.number }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span>👥 <strong>Personnes:</strong> {{ reservation.guests }}</span>
+                            </div>
+                        </div>
+
+                        {% if reservation.special_requests %}
+                            <div class="info-item" style="margin-top: 1rem;">
+                                <strong>Demandes spéciales:</strong> {{ reservation.special_requests }}
+                            </div>
+                        {% endif %}
+
+                        <div style="margin-top: 1rem;">
+                            <p><strong>📍 Adresse:</strong> {{ reservation.table.restaurant.address }}</p>
+                            <p><strong>📞 Téléphone:</strong> {{ reservation.table.restaurant.phone }}</p>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center;">
+                        {% if reservation.status == 'pending' %}
+                            <span class="status-badge status-pending">⏳ En attente</span>
+                        {% elif reservation.status == 'confirmed' %}
+                            <span class="status-badge status-confirmed">✅ Confirmée</span>
+                        {% elif reservation.status == 'cancelled' %}
+                            <span class="status-badge status-cancelled">❌ Annulée</span>
+                        {% elif reservation.status == 'completed' %}
+                            <span class="status-badge status-completed">🎉 Terminée</span>
+                        {% endif %}
+
+                        {% if reservation.status == 'pending' or reservation.status == 'confirmed' %}
+                            <form method="post" action="{% url 'cancel_reservation' reservation.id %}" style="margin-top: 1rem;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline"
+                                        onclick="return confirm('Êtes-vous sûr de vouloir annuler cette réservation ?')">
+                                    Annuler
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-state-icon">📅</div>
+                <h3>Aucune réservation</h3>
+                <p>Vous n'avez pas encore de réservation.</p>
+                <a href="{% url 'make_reservation' %}" class="btn btn-primary" style="margin-top: 1rem;">
+                    Faire une réservation
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
